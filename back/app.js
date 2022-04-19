@@ -7,10 +7,11 @@ const cors = require('cors');
 
 /* - - - - - CONTROLLERS - - - - - */
 // Récupération de la fonction de création utilisateur
-const {creationUser} = require('./controllers/user')
+const {creationUser, loginUser} = require('./controllers/user');
 
 /* - - - - - BASSE DE DONNEES - - - - - */
-require('./mongo')
+// Import du fichier JS mongo
+require('./mongo');
 
 /* - - - - - MIDDLEWARES - - - - - */
 app.use(cors());
@@ -19,7 +20,10 @@ app.use(express.json());
 
 /* - - - - - ROUTES - - - - - */
 // Post pour la création d'un utilisateur au Signup
-app.post('/api/auth/signup', creationUser)
+app.post('/api/auth/signup', creationUser);
+
+// Post pour le login de l'utilisateur
+app.post('/api/auth/login', loginUser);
 
 // Export du fichier app
 module.exports = app;
