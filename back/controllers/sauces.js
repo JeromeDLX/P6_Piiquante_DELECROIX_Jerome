@@ -1,4 +1,5 @@
 // Imports fichier et, dépendances
+const res = require('express/lib/response');
 const mongoose = require('mongoose');
 
 // Création du shema des informations à avoir pour chaque sauces
@@ -21,8 +22,18 @@ const produitModele = mongoose.model("produitModele", produitSchema);
 
 //Fonction de vérification du token utilisateur avec, autorisation ou non d'accès aux sauces
 function recupSauces(req, res){
-    console.log("Le token semble bon, nous avons récupérés les sauces")
-    produitModele.find({}).then(produitsAjoutes => res.send(produitsAjoutes))
+    //produitModele.deleteMany({}).then (console.log)
+    produitModele.find({})
+    .then(produitsAjoutes => res.send(produitsAjoutes))
+    .catch(error => res.status(500).send(error))
+};
+
+// Fonction servant à récupérer l'id et, les params relatifs au produit cliqué par l'utilisateur
+function recupSauceDepuisId(req, res){
+    const {id} = req.params
+    produitModele.findById(id)
+    .then(sauceRecovered => res.send(sauceRecovered))
+    .catch(console.error)
 };
 
 // Fonction de création d'une sauces avec les champs à lui attribuer
@@ -48,7 +59,10 @@ function creationSauces(req, res){
     })
     produit
     .save()
-    .then((res) => console.log("Produit enregistré", produit))
+    .then((msg) => {
+        res.status(201).send({message: msg})
+        return console.log("Produit enregistré", msg)
+    })
     .catch(console.error)
 };
 
@@ -58,4 +72,4 @@ function creationImageUrl(req, fileName){
 };
 
 // Export des fonctions de recuperation des sauces
-module.exports = {recupSauces, creationSauces};
+module.exports = {recupSauces, creationSauces, recupSauceDepuisId};
