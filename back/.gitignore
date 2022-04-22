@@ -1,3 +1,4 @@
 // Fichiers et, dossiers à ne pas prendre en compte par Git
 .env
 node_modules
+images
