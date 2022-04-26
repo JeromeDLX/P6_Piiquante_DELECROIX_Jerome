@@ -17,7 +17,7 @@ require('./mongo');
 const {creationUser, loginUser} = require('./controllers/user');
 
 // Récupération de la fonction de recup et, de création des sauces
-const {recupSauces, creationSauces, recupSauceDepuisId} = require('./controllers/sauces');
+const {recupSauces, creationSauces, recupSauceDepuisId, supressionSauce, modificationSauces} = require('./controllers/sauces');
 
 /* - - - - - MIDDLEWARES - - - - - */
 // Sert à se connecter avec Express, pour faire des requetes au serveur et, recevoir des réponses
@@ -45,8 +45,14 @@ app.get('/api/sauces', authentUser, recupSauces);
 // Post pour l'ajout, la création de sauces et l'upload de l'image (Authentification User requis)
 app.post('/api/sauces', authentUser, upload.single("image"), creationSauces);
 
-// Get lors du clic sur une sauce
-app.get ('/api/sauces/:id', authentUser, recupSauceDepuisId)
+// Get lors du clic sur une sauce (Authentification User requis)
+app.get('/api/sauces/:id', authentUser, recupSauceDepuisId);
+
+// Delete pour la supression d'une sauce (Authentification User requis)
+app.delete('/api/sauces/:id', authentUser, supressionSauce);
+
+// Put pour la modification des informations d'une sauce (Authentification User requis)
+app.put('/api/sauces/:id', authentUser, upload.single("image"), modificationSauces);
 
 // Requete pour vérifier le bon accés au port 3000
 app.get("/", (req, res) => res.send("Test d'affichage"));
