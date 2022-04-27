@@ -5,17 +5,17 @@ const {unlink} = require('fs/promises');
 
 // Création du shema des informations à avoir pour chaque sauces
 const produitSchema = new mongoose.Schema({
-    userId: String,
-    name : String,
-    manufacturer: String,
-    description : String,
-    mainPepper : String,
-    imageUrl : String,
-    heat : Number,
-    likes : Number,
-    dislikes : Number,
-    usersLiked : ["String"],
-    usersDisliked : ["String"]
+    userId: {type: String, required: true},
+    name : {type: String, required: true},
+    manufacturer: {type: String, required: true},
+    description : {type: String, required: true},
+    mainPepper : {type: String, required: true},
+    imageUrl : {type: String, required: true},
+    heat : {type: Number, required: true, min: 1, max: 10},
+    likes : {type: Number, default: 0},
+    dislikes : {type: Number, default: 0},
+    usersLiked : {type: ["String"], required : true},
+    usersDisliked : {type: ["String"], required : true},
 });
 
 // Création d'un modele pour les sauces
@@ -23,18 +23,22 @@ const produitModele = mongoose.model("produitModele", produitSchema);
 
 //Fonction de vérification du token utilisateur avec, autorisation ou non d'accès aux sauces
 function recupSauces(req, res){
-    //produitModele.deleteMany({}).then (console.log)
     produitModele.find({})
     .then(produitsAjoutes => res.send(produitsAjoutes))
     .catch(error => res.status(500).send(error))
 };
 
+// Fonction ayant pour but de récupérer depuis les params les infos relatives à une sauce
+function recupInfosSauce(req, res){
+    const {id} = req.params
+    return produitModele.findById(id)
+};
+
 // Fonction servant à récupérer l'id et, les params relatifs au produit cliqué par l'utilisateur
 function recupSauceDepuisId(req, res){
-    const {id} = req.params
-    produitModele.findById(id)
-    .then(sauceRecovered => res.send(sauceRecovered))
-    .catch(console.error)
+    recupInfosSauce(req, res)
+        .then((produit) => clientResponse(produit, res))
+        .catch((err) => res.status(500).send(err))
 };
 
 /* Fonction ayant pour but de supprimer une sauce lors du clic sur le bouton DELETE et,
@@ -86,8 +90,8 @@ function clientResponse(produit, res){
     if (produit == null){
         return res.status(404).send({message: "Sauce non trouvée dans la base de données"})
     } 
-    return Promise.resolve(res.status(200).send({message: "Update success"}))
-    .then(()=> produit)
+    return Promise.resolve(res.status(200).send(produit))
+    .then(() => produit)
 };
 
 // Fonction de création d'une sauce avec les champs à lui attribuer
@@ -113,11 +117,8 @@ function creationSauces(req, res){
     })
     produit
     .save()
-    .then((msg) => {
-        res.status(201).send({message: msg})
-        return console.log("Produit enregistré", msg)
-    })
-    .catch(console.error)
+    .then((msg) => res.status(201).send({msg}))
+    .catch((err) => res.status(500).send({message: err}))
 };
 
 // Fonction servant à créer le bon cheminement vers l'image (Chemin absolu pour chercher sur le serveur)
@@ -125,5 +126,20 @@ function creationImageUrl(req, fileName){
     return req.protocol + "://" + req.get("host") + "/images/" + fileName
 };
 
+// Fonction servant à gérer lorsque l'utilisateur like une sauce
+function likeSauce(req, res){
+    recupInfosSauce(req, res)
+        .then((produit) => {
+            console.log("Le produit liké/disliké est:", produit)
+        })
+};
+
 // Export des fonctions de recuperation des sauces
-module.exports = {recupSauces, creationSauces, recupSauceDepuisId, supressionSauce, modificationSauces};
+module.exports = {
+    recupSauces, 
+    creationSauces, 
+    recupSauceDepuisId, 
+    supressionSauce, 
+    modificationSauces,
+    likeSauce
+};

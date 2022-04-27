@@ -18,4 +18,5 @@ function creationFilename(req, file){
 
 const upload = multer({ storage });
 
+// Export de la constante d'upload
 module.exports = {upload}
