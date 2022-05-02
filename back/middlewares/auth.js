@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 
 // Fonction d'autorisation d'accés utilisateur, après Login
 function authentUser(req, res, next){
-    //console.log("Authentification de l'utilisateur")
     const headerAutorisation = req.header('Authorization')
     if (headerAutorisation == null)return res.status(403).send({message: "Non valide"})
     

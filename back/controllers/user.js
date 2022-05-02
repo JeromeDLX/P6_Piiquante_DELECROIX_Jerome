@@ -17,7 +17,7 @@ async function creationUser(req, res){
     }
 };
 
-// Fonction qui sert au cryptage des MDP utilisateurs
+// Fonction qui sert au cryptage des MDP utilisateurs avec cryptage *10
 function hashPassword(password){
     const saltRounds = 10;
     return bcrypt.hash(password, saltRounds)
