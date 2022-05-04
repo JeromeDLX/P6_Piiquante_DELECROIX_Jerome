@@ -13,7 +13,6 @@ function authentUser(req, res, next){
     // Mise en place de la vérification du token
     jwt.verify(token, process.env.JWT_PASSWORD, (err, decodage) => {
         if(err) return res.status(403).send({message: "Token non valide " + err})
-        //console.log("Le token est valide on passe la suite")
         next()
     })
 };

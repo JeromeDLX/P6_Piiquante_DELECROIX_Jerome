@@ -97,7 +97,6 @@ function clientResponse(produit, res){
     if (produit == null){
         return res.status(404).send({message: "Sauce non trouvée dans la base de données"})
     } 
-    console.log("Voila ce qui à été MAJ:", produit)
     return Promise.resolve(res.status(200).send(produit))
     .then(() => (produit))
 };
@@ -173,7 +172,6 @@ function resetLike(produit, userId, res){
 // Fonction d'ajout d'un like ou, d'un dislike à une sauce
 function ajoutLike(produit, userId, like){
     let {usersLiked, usersDisliked} = produit
-    console.log("SAUCE BEFORE", produit)
     const arrayDeVotes = like === 1 ? usersLiked : usersDisliked
     if (arrayDeVotes.includes(userId)) return produit
     arrayDeVotes.push(userId)
