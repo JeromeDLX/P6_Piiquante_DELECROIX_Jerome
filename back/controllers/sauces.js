@@ -99,7 +99,7 @@ function clientResponse(produit, res){
     } 
     console.log("Voila ce qui à été MAJ:", produit)
     return Promise.resolve(res.status(200).send(produit))
-    .then(() => produit)
+    .then(() => (produit))
 };
 
 // Fonction de création d'une sauce avec les champs à lui attribuer
@@ -134,7 +134,7 @@ function creationImageUrl(req, fileName){
     return req.protocol + "://" + req.get("host") + "/images/" + fileName
 };
 
-/* - - - - - LIKE & DISLIKES - - - - - */
+/* - - - - - - - - LIKE & DISLIKES - - - - - - - - */
 
 // Fonction servant à gérer lorsque l'utilisateur like une sauce
 function likeSauce(req, res){
@@ -143,23 +143,22 @@ function likeSauce(req, res){
 
     recupSauce(req, res)
     .then((produit) => updateVote(produit, like, userId, res))
-    .then ((sauceSave) => sauceSave.save())
-    .then((sauce) => clientResponse(sauce, res))
+    .then((produitSave) => produitSave.save())
+    .then ((prod) => clientResponse(prod, res))
     .catch((err) => res.status(500).send(err))
 };
 
-// Fonction de gestion des likes/ dislikes/ non prononcé
+// Fonction de gestion des likes & dislikes
 function updateVote(produit, like, userId, res){
-    if (like === 1 || like === -1 ) return addRemoveLike(produit, userId, like)
+    if (like === 1 || like === -1) return ajoutLike(produit, userId, like)
     return resetLike(produit, userId, res)
 };
 
-// Fonction si like est = 0
+// Fonction de reset quand like = 0
 function resetLike(produit, userId, res){
     const {usersLiked, usersDisliked} = produit
-    if ([usersLiked, usersDisliked].every((array) => array.includes(userId))) return Promise.reject ("Utilisateur à voté dans les deux catégories")
-
-    if (![usersLiked, usersDisliked].some((array) => array.includes(userId))) return Promise.reject ("Utilisateur ne semble pas avoir voté")
+    if ([usersLiked, usersDisliked].every(array => array.includes(userId))) return Promise.reject({message: "L'utilisateur semble avoir voté dans les deux catégories"})
+    if (![usersLiked, usersDisliked].some(array => array.includes(userId))) return Promise.reject({message: "L'utilisateur semble ne pas avoir voté"})
     
     if (usersLiked.includes(userId)){
         --produit.likes
@@ -172,15 +171,18 @@ function resetLike(produit, userId, res){
 };
 
 // Fonction d'ajout d'un like ou, d'un dislike à une sauce
-function addRemoveLike(produit, userId, like){
-    const {usersLiked, usersDisliked} = produit
-
+function ajoutLike(produit, userId, like){
+    let {usersLiked, usersDisliked} = produit
+    console.log("SAUCE BEFORE", produit)
     const arrayDeVotes = like === 1 ? usersLiked : usersDisliked
-
     if (arrayDeVotes.includes(userId)) return produit
     arrayDeVotes.push(userId)
 
-    like === 1 ? ++produit.likes : ++produit.dislikes
+    if (like === 1) {
+        produit.likes++
+    } else {
+        produit.dislikes++
+    }
     return produit
 };
 

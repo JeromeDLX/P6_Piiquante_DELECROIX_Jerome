@@ -15,7 +15,7 @@ const bodyParser = require('body-parser');
 const {routerSauces} = require('./routers/sauces');
 
 // Mise en place du routeur d'authentification
-const {routerAuth} = require('./routers/auth');
+const {routerUser} = require('./routers/user');
 
 /* - - - - - BASSE DE DONNEES - - - - - */
 // Import du fichier JS mongo
@@ -35,7 +35,7 @@ app.use(express.json());
 app.use('/api/sauces', routerSauces);
 
 // Sert à renvoyer vers le fichier routeur de l'authentification
-app.use('/api/auth', routerAuth);
+app.use('/api/auth', routerUser);
 
 /* - - - - - ROUTES - - - - - */
 // Requete pour vérifier le bon accés au port 3000
