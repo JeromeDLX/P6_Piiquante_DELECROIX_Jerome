@@ -15,7 +15,7 @@ mongoose
 .then(() => console.log("Connecté à Mongo"))
 .catch ((err) => console.log("Echec de la connexion à Mongo", err));
 
-// Construction d'un schéma typique d'un utilisateur (Informations recueillis), identifiants uniques
+// Construction d'un schéma typique d'un utilisateur (Informations recueillis), adresse email unique
 const userSchema = new mongoose.Schema({
     email: {type: String, require: true, unique: true},
     password: {type: String, required: true},
