@@ -1,25 +1,9 @@
 // Imports fichier et, dépendances
-const mongoose = require('mongoose');
 // fs : File System
 const {unlink} = require('fs/promises');
 
-// Création du shema des informations à avoir pour chaque sauces
-const produitSchema = new mongoose.Schema({
-    userId: {type: String, required: true},
-    name : {type: String, required: true},
-    manufacturer: {type: String, required: true},
-    description : {type: String, required: true},
-    mainPepper : {type: String, required: true},
-    imageUrl : {type: String, required: true},
-    heat : {type: Number, required: true, min: 1, max: 10},
-    likes : {type: Number, default: 0},
-    dislikes : {type: Number, default: 0},
-    usersLiked : {type: [String], required : true},
-    usersDisliked : {type: [String], required : true}
-});
-
 // Création d'un modele pour les sauces
-const produitModele = mongoose.model("produitModele", produitSchema);
+const produitModele = require('../models/sauces')
 
 //Fonction de vérification du token utilisateur avec, autorisation ou non d'accès aux sauces
 function recupSauces(req, res){
@@ -42,7 +26,7 @@ function recupSauceDepuisId(req, res){
 };
 
 /* Fonction ayant pour but de supprimer une sauce lors du clic sur le bouton DELETE et,
- renvoit vers la fonction de suppresion de l'image*/
+renvoit vers la fonction de suppresion de l'image*/
 function supressionSauce(req, res){
     const {id} = req.params
     // Ordre de suppression de la sauce est envoyé à MongoDB
@@ -184,7 +168,7 @@ function ajoutLike(produit, userId, like){
     return produit
 };
 
-// Export des fonctions de recuperation des sauces
+// Export des fonctions
 module.exports = {
     recupSauces, 
     creationSauces, 
