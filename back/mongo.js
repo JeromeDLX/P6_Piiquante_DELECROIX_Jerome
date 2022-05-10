@@ -10,7 +10,6 @@ const uri = `mongodb+srv://${username}:${password}@cluster-piiquante.rsq6v.mongo
 // Connexion à mongoDB avec l'URI fournie
 mongoose
 .connect(uri)
-.then(() => console.log("Connecté à Mongo"))
 .catch ((err) => console.log("Echec de la connexion à Mongo", err));
 
 module.exports = {mongoose};
