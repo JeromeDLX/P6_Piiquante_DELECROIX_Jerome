@@ -28,13 +28,13 @@ app.use(bodyParser.json())
 // Sert à se connecter avec Express, pour faire des requetes au serveur et, recevoir des réponses
 app.use(cors());
 
-// Sert à récupérer les informations dans la requete de signup
+// Sert à récupérer les informations dans le corp des requêtes entrantes
 app.use(express.json());
 
 // Sert à renvoyer vers le fichier routeur des sauces
 app.use('/api/sauces', routerSauces);
 
-// Sert à renvoyer vers le fichier routeur de l'authentification
+// Sert à renvoyer vers le fichier routeur d'authentification
 app.use('/api/auth', routerUser);
 
 /* - - - - - ROUTES - - - - - */
