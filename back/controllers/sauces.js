@@ -5,7 +5,7 @@ const {unlink} = require('fs/promises');
 // Création d'un modele pour les sauces
 const produitModele = require('../models/sauces')
 
-//Fonction de vérification du token utilisateur avec, autorisation ou non d'accès aux sauces
+//Fonction récupération des sauces
 function recupSauces(req, res){
     produitModele.find({})
     .then((produitsAjoutes) => res.send(produitsAjoutes))
@@ -35,7 +35,6 @@ function supressionSauce(req, res){
     .then((produit) => clientResponse(produit, res))
     // Supression de l'image de la base de données
     .then((item) => deleteOldImage(item))
-    .then((res) => console.log("Fichier Supprimé", res))
     // Si jamais une erreur se produit, retourne le code 500 avec le message "error"
     .catch((err) => res.status(500).send({message: err}))
 };

@@ -9,7 +9,7 @@ function authentUser(req, res, next){
     // Split pour séparer les éléments, enlever les espaces et, selectionner que l'ID token
     const token = headerAutorisation.split(" ")[1]
     if (token == null)return res.status(403).send({message: "Le token ne peut être nul"})
- 
+
     // Mise en place de la vérification du token
     jwt.verify(token, process.env.JWT_PASSWORD, (err, decodage) => {
         if(err) return res.status(403).send({message: "Token non valide " + err})
