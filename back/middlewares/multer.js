@@ -11,7 +11,8 @@ const storage = multer.diskStorage({
 
 // Fonction de création du nom d'image unique
 function creationFilename(req, file){
-    const fileName = `${Date.now()}-${file.originalname}`.replace(/\s/g, "-")
+    const filename_original = file.originalname.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    const fileName = `${Date.now()}_${filename_original}`.replace(/\s/g, "_")
     file.fileName = fileName
     return fileName
 };
