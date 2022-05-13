@@ -127,7 +127,7 @@ function likeSauce(req, res){
     .then((produit) => updateVote(produit, like, userId, res))
     .then((produitSave) => produitSave.save())
     .then ((prod) => clientResponse(prod, res))
-    .catch((err) => res.status(500).send(err))
+    .catch((err) => res.status(404).send({mesage: err}))
 };
 
 // Fonction de gestion des likes & dislikes
